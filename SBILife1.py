@@ -19,8 +19,8 @@ import streamlit as st
 
 tf.disable_v2_behavior()
 
-genuine_image_paths = (r"D:\Coding\Hackathons\SBI_Life1\real")
-forged_image_paths = (r"D:\Coding\Hackathons\SBI_Life1\forged")
+genuine_image_paths = (r"real")
+forged_image_paths = (r"forged")
 
 def rgbgrey(img):
     greyimg = np.zeros((img.shape[0], img.shape[1]))
@@ -116,14 +116,14 @@ def getCSVFeatures(path, img=None, display=False):
     return features
 
 def makeCSV():
-    if not os.path.exists(r"D:\Coding\Hackathons\SBI_Life1\Features"):
-        os.mkdir(r"D:\Coding\Hackathons\SBI_Life1\Features")
+    if not os.path.exists(r"Features"):
+        os.mkdir(r"Features")
         print('New folder "Features" created')
-    if not os.path.exists(r"D:\Coding\Hackathons\SBI_Life1\Features\Training"):
-        os.mkdir(r"D:\Coding\Hackathons\SBI_Life1\Features\Training")
+    if not os.path.exists(r"Features\Training"):
+        os.mkdir(r"Features\Training")
         print('New folder "Features/Training" created')
-    if not os.path.exists(r"D:\Coding\Hackathons\SBI_Life1\Features\Testing"):
-        os.mkdir(r"D:\Coding\Hackathons\SBI_Life1\Features\Testing")
+    if not os.path.exists(r"Features\Testing"):
+        os.mkdir(r"Features\Testing")
         print('New folder "Features/Testing" created')
 
     gpath = genuine_image_paths
@@ -132,7 +132,7 @@ def makeCSV():
         per = ('00' + str(person))[-3:]
         print('Saving features for person id-', per)
 
-        with open('D:\\Coding\\Hackathons\\SBI_Life1\\Features\\Training\\training_' + per + '.csv', 'w') as handle:
+        with open('Features\\Training\\training_' + per + '.csv', 'w') as handle:
             handle.write('ratio,cent_y,cent_x,eccentricity,solidity,skew_x,skew_y,kurt_x,kurt_y,output\n')
             for i in range(0, 3):
                 source = os.path.join(gpath, per + per + '_00' + str(i) + '.png')
@@ -143,7 +143,7 @@ def makeCSV():
                 features = getCSVFeatures(path=source)
                 handle.write(','.join(map(str, features)) + ',0\n')
 
-        with open('D:\\Coding\\Hackathons\\SBI_Life1\\Features\\Testing\\testing_' + per + '.csv', 'w') as handle:
+        with open('Features\\Testing\\testing_' + per + '.csv', 'w') as handle:
             handle.write('ratio,cent_y,cent_x,eccentricity,solidity,skew_x,skew_y,kurt_x,kurt_y,output\n')
             for i in range(3, 5):
                 source = os.path.join(gpath, per + per + '_00' + str(i) + '.png')
@@ -158,9 +158,9 @@ makeCSV()
 
 def testing(path):
     feature = getCSVFeatures(path)
-    if not os.path.exists(r"D:\Coding\Hackathons\SBI_Life1\TestFeatures"):
-        os.mkdir(r"D:\Coding\Hackathons\SBI_Life1\TestFeatures")
-    with open(r"D:\Coding\Hackathons\SBI_Life1\TestFeatures\testcsv.csv", 'w') as handle:
+    if not os.path.exists(r"TestFeatures"):
+        os.mkdir(r"TestFeatures")
+    with open(r"TestFeatures\testcsv.csv", 'w') as handle:
         handle.write('ratio,cent_y,cent_x,eccentricity,solidity,skew_x,skew_y,kurt_x,kurt_y\n')
         handle.write(','.join(map(str, feature)) + '\n')
 
@@ -279,11 +279,11 @@ def trainAndTest(rate=0.001, epochs=1700, neurons=7, display=False):
 
 # Remove input prompts and adjust for Streamlit
 def evaluate_image(image_path, train_person_id):
-    train_path = f'D:\\Coding\\Hackathons\\SBI_Life1\\Features\\Training\\training_{train_person_id}.csv'
+    train_path = f'Features\\Training\\training_{train_person_id}.csv'
     feature = getCSVFeatures(image_path)
-    if not os.path.exists(r"D:\Coding\Hackathons\SBI_Life1\TestFeatures"):
-        os.mkdir(r"D:\Coding\Hackathons\SBI_Life1\TestFeatures")
-    test_csv_path = r"D:\Coding\Hackathons\SBI_Life1\TestFeatures\testcsv.csv"
+    if not os.path.exists(r"TestFeatures"):
+        os.mkdir(r"TestFeatures")
+    test_csv_path = r"TestFeatures\testcsv.csv"
     with open(test_csv_path, 'w') as handle:
         handle.write('ratio,cent_y,cent_x,eccentricity,solidity,skew_x,skew_y,kurt_x,kurt_y\n')
         handle.write(','.join(map(str, feature)) + '\n')
