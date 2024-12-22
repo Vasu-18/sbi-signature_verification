@@ -1,0 +1,9 @@
+numpy
+os
+matplotlib
+pillow
+scikit-image
+tensorflow
+pandas
+keras
+streamlit
